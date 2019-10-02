@@ -29,21 +29,17 @@ public class UserService {
     }
 
     public boolean addUser(User user) {
-         if(!isExistsThisUser(user)){
+         if(!isExistsThisUser(user)) {
              dataBase.put(maxId.longValue(), user);
              user.setId(maxId.longValue());
              maxId.incrementAndGet();
              return true;
          }
-         else {
-             return false;
-         }
+         return false;
     }
 
     public void deleteAllUser() {
-        logoutAllUsers();
         dataBase.clear();
-        maxId = new AtomicLong(0);
     }
 
     public boolean isExistsThisUser(User user) {
@@ -68,12 +64,10 @@ public class UserService {
     }
 
     public List<User> getAllAuth() {
-        List<User> listAllAuth = new ArrayList<User>(authMap.values());
-        return  listAllAuth;
+        return  new ArrayList<User>(authMap.values());
     }
 
     public boolean authUser(User user) {
-        long id = 0;
         for (Map.Entry<Long, User> entry : dataBase.entrySet()) {
             long key = entry.getKey();
             User value = entry.getValue();
@@ -81,9 +75,8 @@ public class UserService {
                 if (isLoginThisUser(user)) {
                     return false;
                 } else {
-                    id = key;
-                    authMap.put(id, user);
-                    user.setId(id);
+                    authMap.put(key, user);
+                    user.setId(key);
                     return true;
                 }
             }
